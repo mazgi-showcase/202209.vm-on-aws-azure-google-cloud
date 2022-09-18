@@ -77,7 +77,8 @@ x-service-provisioning-base: &provisioning-base
   volumes:
     - provisioning-home-developer:/home/developer
     - provisioning-home-root:/root # for macOS & Windows
-    - /var/run/docker.sock:/var/run/docker.sock
+    - ~/.ssh:/home/developer/.ssh:ro
+    - ~/.ssh:/root/.ssh:ro # for macOS & Windows
     - .:/workspace
   working_dir: /workspace/provisioning
 
