@@ -16,6 +16,9 @@ And you need to set up the repository following steps.
 You should write your account IDs and credentials depending on your need, such as AWS, Azure, and Google Cloud, in the `.env` file as follows.
 
 ```.env
+# UID=1234
+# GID=1234
+# DOCKER_GID=2345
 PROJECT_UNIQUE_ID=my-unique-b78e
 _TERRAFORM_BACKEND_TYPE=azurerm
 TF_VAR_allowed_ipaddr_list=["203.0.113.0/24"]
@@ -41,17 +44,32 @@ CLOUDSDK_CORE_PROJECT=my-proj-b78e
 # </Google>
 ```
 
-In addition, if you use Google Cloud, you should place the [key file for Google Cloud Service Account](https://cloud.google.com/iam/docs/creating-managing-service-account-keys) as `config/credentials/google-cloud-keyfile.provisioning-owner.json`.
+:information_source: If you are using Linux, write out UID, GID, and GID for the `docker` group, into the `.env` file to let that as exported on Docker Compose as environment variables.
+
+```console
+test $(uname -s) = 'Linux' && {
+  echo -e "UID=$(id -u)\nGID=$(id -g)"
+  echo -e "DOCKER_GID=$(getent group docker | cut -d : -f 3)"
+} >> .env || :
+```
+
+:information_source: In addition, if you use Google Cloud, you should place the [key file for Google Cloud Service Account](https://cloud.google.com/iam/docs/creating-managing-service-account-keys) as `config/credentials/google-cloud-keyfile.provisioning-owner.json`.
 
 #### Environment Variable Names
 
 Environment variable names and uses are as follows.
 
-| Name                       | Required with Terraform | Value                                                                                                           |
-| -------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------- |
-| PROJECT_UNIQUE_ID          | **Yes**                 | An ID to indicate your environment.<br/>The value is used for an Object Storage bucket or Storage Account name. |
-| \_TERRAFORM_BACKEND_TYPE   | **Yes**                 | Acceptable values are `azurerm`, `gcs`, `s3`, and `none`.                                                       |
-| TF_VAR_allowed_ipaddr_list | no                      | IP address ranges you want access to your cloud environment.                                                    |
+| Name       | Required on Linux | Value                                                                                                                                   |
+| ---------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| UID        | **Yes**           | This ID number is used as UID for your Docker user, so this ID becomes the owner of all files and directories created by the container. |
+| GID        | **Yes**           | The same as the above UID.                                                                                                              |
+| DOCKER_GID | **Yes**           | This ID number is used to provide permission to read and write your docker socket on your local machine from your container.            |
+
+| Name                       | Required with Terraform | Value                                                                                                                                         |
+| -------------------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| PROJECT_UNIQUE_ID          | **Yes**                 | An ID to indicate your environment.<br/>The value is used for the name of the Object Storage bucket or Storage Account for Terraform backend. |
+| \_TERRAFORM_BACKEND_TYPE   | **Yes**                 | Acceptable values are `azurerm`, `gcs`, `s3`, and `none`.                                                                                     |
+| TF_VAR_allowed_ipaddr_list | no                      | IP address ranges you want access to your cloud environment.                                                                                  |
 
 </details>
 <details>
