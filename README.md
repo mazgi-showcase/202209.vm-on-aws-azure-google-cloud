@@ -1,8 +1,8 @@
-# template.dockerized-provisioning-project
+# Example for Virtual Machine on AWS, Azure, and Google Cloud
 
-[![default](https://github.com/mazgi/template.dockerized-provisioning-project/actions/workflows/default.yml/badge.svg)](https://github.com/mazgi/template.dockerized-provisioning-project/actions/workflows/default.yml)
+This repository is a Terraform example build a Virtual Machine(VM) on each IaaS: AWS, Azure, and Google Cloud.
 
-This repository is a template for provisioning your Cloud and Local environment using [Terraform](https://www.terraform.io/) and [Ansible](https://www.ansible.com/).
+![structure](docs/images/drawing/drawing.001.png)
 
 ## How to Use
 
